@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'export',  //ricorda smania api
+    //output: 'export',  //ricorda smania api
     images: { unoptimized : true},
-    exportImageAssets: true,
-    /* api: {
+    //exportImageAssets: true,
+    api: {
       bodyParser: false,
-  }, */
-  asset: {
-    publicPath: '/public',
   },
 }
 
