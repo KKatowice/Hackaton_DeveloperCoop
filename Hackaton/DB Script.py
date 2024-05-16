@@ -1,7 +1,7 @@
 import pymongo
 from fastapi import FastAPI, Form, Body
 from pydantic import BaseModel
-
+import json
 app = FastAPI()
 
 client = pymongo.MongoClient("mongodb+srv://armandolacerezagc:yyfRehzIWI8M8Nok@cluster0.kwa0fg9.mongodb.net/")
@@ -59,3 +59,6 @@ def insert_forum():
     timestamp = 0
     comments = 0
     tags = 0
+
+p = json.loads('{"date":0 , "sub": []}')
+print(p, type(p["sub"]))
