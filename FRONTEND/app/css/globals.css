@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+body {
+  margin: 0;
+  line-height: normal;
+  overflow-x: hidden;
+}
+
+:root {
+  /* fonts */
+  --font-inter: Inter;
+  --font-inherit: inherit;
+  --font-open-sans: "Open Sans";
+  --font-roboto: Roboto;
+
+  /* font sizes */
+
+
+  /* Colors */
+  --backGroundColor: #161616;
+  --textDimColor: #dddbbb;
+  --yellowColor: #FFD200;
+  /* Gaps */
+
+  /* Margin */
+  --marginBorder: 3rem;
+
+  /* border radiuses */
+  --buttonRadius: 1.5rem;
+
+  
+
+
+}
+
