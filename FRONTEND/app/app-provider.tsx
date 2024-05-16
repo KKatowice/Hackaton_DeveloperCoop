@@ -1,7 +1,7 @@
 'use client'
 import './css/globals.css'
-import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
-
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
+import { getCookie } from 'cookies-next';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultConfig,
@@ -22,13 +22,17 @@ import {
 } from "@tanstack/react-query";
 
 interface ContextProps {
-  sidebarOpen: boolean
-  setSidebarOpen: Dispatch<SetStateAction<boolean>>
+  sidebarOpen: boolean;
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+  authenticated: boolean;
+  jwtToken: string | null;
 }
 
 const AppContext = createContext<ContextProps>({
   sidebarOpen: false,
-  setSidebarOpen: (): boolean => false
+  setSidebarOpen: (): boolean => false,
+  authenticated: false,
+  jwtToken: null
 })
 
 export default function AppProvider({
@@ -101,11 +105,32 @@ export default function AppProvider({
   }
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [jwtToken, setJwtToken] = useState<string | null>(null)
+
+  useEffect(() => {
+    const jwtCookie = getCookie('jwt');
+    if (jwtCookie) {
+      try {
+        const userData = verifyJwt(jwtCookie); // Implement your JWT verification logic here
+        setAuthenticated(userData);
+        setJwtToken(jwtCookie);
+      } catch (error) {
+        // Handle invalid JWT or errors
+        console.error(error);
+      }
+    }
+  }, []);
+
+  function verifyJwt(jw:string){
+    return true
+  }
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={customTheme}>
-          <AppContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
+          <AppContext.Provider value={{ sidebarOpen, setSidebarOpen, authenticated, jwtToken }}>
             {children}
           </AppContext.Provider>
         </RainbowKitProvider>

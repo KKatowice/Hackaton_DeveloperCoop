@@ -1,16 +1,20 @@
-'use client'
-
+"use client"
 import Link from 'next/link'
 import AuthHeader from '../auth-header'
 import AuthImage from '../auth-image'
 import { useState } from 'react';
 import axios from 'axios';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+//const bcrypt = require('bcrypt');
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
 
 export default function SignIn() {
 
   const [formData, setFormData] = useState({ email: '', password: '', address: '' });
   const address = '0x391FB980526B32fE88796273cEA486468dA0ABCD';///placeholder
+  const notyf = new Notyf()
+
   async function handleSubmit(){
     console.log('Form data:', formData);
     try {
@@ -20,16 +24,37 @@ export default function SignIn() {
           'Content-Type': 'application/json'
         }});
       console.log(response.data,"res");
-      const token = response.data.token;
+      const token = response.data.jwt;
+      if(token){
+        console.log("sisi esiste jwt")
+        notyf.success("Welcome back!");
+        window.location.href = '/community/forum';
+      }else{
+        notyf.error("Invalid credentials");
+      }
       console.log(token,"token");
     } catch (error) {
+      notyf.error("Invalid credentials");
       console.error(error);
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.id]: event.target.value });
+    let trg = event.target.id
+    let val = event.target.value
+    setFormData({ ...formData, [trg]: val });
   };
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <main className="bg-white dark:bg-slate-900">
@@ -93,7 +118,7 @@ export default function SignIn() {
           </div>
         </div>
 
-        <AuthImage />
+       
 
       </div>
 
