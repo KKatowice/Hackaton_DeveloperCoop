@@ -39,7 +39,7 @@ def inserisci_commento(id_post, id_user, testo):
     print("Commento caricato")
 
 
-def inserisci_sottocommento(id_commento, id_user, testo):
+def inserisci_sottocommento(id_post, id_commento, id_user, testo):
     sottocommento = {
     "userID" : id_user,                                  
     "testo" : testo,
@@ -49,7 +49,7 @@ def inserisci_sottocommento(id_commento, id_user, testo):
     path = "commenti." + id_commento + ".risposte"
     #update che aggiunge commento sotto ad un commento
     forum_postCollection.update_one(
-        {"_id" : ObjectId("664602cdf9e176e49ced5f94")}, 
+        {"_id" : ObjectId(id_post)}, 
         {"$push": {path: sottocommento}})      
     print("Sottocommento caricato")
 
