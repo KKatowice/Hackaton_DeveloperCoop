@@ -1,5 +1,6 @@
 import pymongo
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, Body
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -8,6 +9,16 @@ db = client["forum"]
 prodotti = db["forum_post"]
 users = db["users"]
 
+
+class User_Signin(BaseModel):
+    salt: str | None = None
+    address: str | None = None
+    email: str | None = None
+    password: str | None = None
+    nome: str | None = None
+    cognome: str | None = None
+    role: str | None = None
+    interessi: str | None = None
 
 @app.post('/insertuser')
 async def insert_user():
@@ -19,20 +30,24 @@ async def insert_user():
 #     return 0
 
 @app.post("/signup")
-def signup(email: str = Form(...), nome: str = Form(...), cognome: str = Form(...),
-           password: str = Form(...), role: str = Form(...), interessi: str = Form(...)):
-
-    users.insert_one({
-        "email": email,
-        "nome": nome,
-        "cognome": cognome,
-        "password": password,
-        "role": role,
-        "interessi": interessi,
-        "post": [],
-        "coment": [],
-        "file": []
-    })
+def signup(user_data: User_Signin):
+    
+    if user_data.email and len(list(users.find({'email': user_data.email}))) == 0:
+        users.insert_one({
+            "email": user_data.email,
+            "nome": user_data.nome,
+            "cognome": user_data.cognome,
+            "password": user_data.password,
+            "role": user_data.role,
+            "interessi": user_data.interessi,
+            "post": [],
+            "comment": [],
+            "file": [],
+            "salt": user_data.salt,
+            "address": user_data.address
+        })
+    else:
+        return 0
 
 
 
