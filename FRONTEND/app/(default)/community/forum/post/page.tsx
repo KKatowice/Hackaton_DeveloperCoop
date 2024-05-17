@@ -16,9 +16,6 @@ export default function ForumPost() {
         {/* Left + Middle content */}
         <div className="md:flex flex-1">
 
-          {/* Left content */}
-          <ForumLeftContent />
-
           {/* Middle content */}
           <div className="flex-1 md:ml-8 xl:mx-4 2xl:mx-8">
             <div className="md:py-8">

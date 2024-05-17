@@ -1,5 +1,7 @@
+"use client"
 import Image from 'next/image'
 import UserImage from '@/public/user-40-04.jpg'
+import { useState } from 'react'
 
 export default function ForumPostRightContent() {
 
@@ -21,51 +23,33 @@ export default function ForumPostRightContent() {
     )
   }
 
+  const [isOpen, setisOpen] = useState(false)
+
   return (
     <div className="w-full hidden xl:block xl:w-[18rem]">
       <div className="lg:sticky lg:top-16 lg:h-[calc(100dvh-64px)] lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar">
         <div className="md:py-8">
           {/* Button */}
           <div className="mb-6">
-            <button className="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">Create Post</button>
+            <button className="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white" onClick={()=> setisOpen(!isOpen)}>Scrivi un post</button>
           </div>
-
-          {/* Blocks */}
-          <div className="space-y-4">
-
-            {/* Block 1 */}
-            <div className="bg-slate-50 dark:bg-slate-800/20 p-4 rounded border border-slate-200 dark:border-slate-700">
-              <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-4">About the Author</div>
-              <div className="flex items-center mb-4">
-                <div className="w-10 h-10 shrink-0 mr-3">
-                  <Image className="rounded-full" src={UserImage} width={40} height={40} alt="User 04" />
+          {
+            isOpen ?
+              <form className="max-w-sm mx-auto">
+                <div className="mb-5">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titolo</label>
+                  <input type="text" id="titolo" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                 </div>
-                <div>
-                  <div className="font-semibold text-slate-800 dark:text-slate-100">Kate Merlu</div>
-                  <div className="text-sm text-slate-500 dark:text-slate-400 italic">Building SquareApp 🚀</div>
+                <div className="mb-5">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Testo del post</label>
+                  <textarea id="testo_post" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                 </div>
-              </div>
-              <ul className="text-sm space-y-2">
-                <li>🔥 <span className="font-medium">39</span> Posts</li>
-                <li>✍️ <span className="font-medium">299</span> Comments</li>
-              </ul>
-              <div className="mt-4">
-                <button className="btn-sm w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">Follow</button>
-              </div>
-            </div>
+                <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Pubblica</button>
+              </form>
 
-            {/* Block 2 */}
-            <div className="bg-slate-50 dark:bg-slate-800/20 p-4 rounded border border-slate-200 dark:border-slate-700">
-              <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-4">Popular Stories</div>
-              <ul className="space-y-3">
-              {story("I built and sold 2 small SaaS products and quit my job in the last two years — AMA","UserName",2,312)}             
-
-              </ul>
-              <div className="mt-4">
-                <button className="btn-sm w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
-              </div>
-            </div>
-          </div>
+              : null
+          }
+    
         </div>
       </div>
     </div>
