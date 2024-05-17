@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from datetime import timedelta
 import json
 from openai import OpenAI
-from google.cloud import storage
+# from google.cloud import storage
 
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ def insertuser():
         return jsonify({"result": "error"})
 
 
-@app.route("/newpost", methods=["POST"])
+@app.route("/newpost", methods=["POST", "GET"])
 def newpost():
     new_post = json.loads(request.json)
     forum_post.insert_one(new_post)
@@ -68,15 +68,18 @@ def newsubcomment():
 
 @app.route("/savefile", methods=["POST"])
 def savefile():
-    if "newfile" in request.files:
+    infofile = json.loads(request.json)  # idperson+idpost
+    print(infofile)
+
+    if "response" in request.files or "formData" in request.files:
+        print("si")
         file =request.files["newfile"]
-        infofile = json.loads(request.json) #idperson+idpost
 
         if file and file != "":
             if correct_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(filename)
-
+        return jsonify({"response": "ok" })
 
                 # os.remove(file.filename)
 
@@ -95,6 +98,12 @@ def ia():
     response = ia_service(prompt)
     return jsonify({"response": response})
 
+@app.route("/getallposts")
+def getallposts():
+    posts = list(forum_post.find())
+    print(posts)
+    return jsonify(posts)
+
 
 def correct_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -112,4 +121,7 @@ def ia_service(prompt):
         messages=[{"role": "user", "content": prompt}]
     )
     return str(chat_completion.choices[0].message.content)
+
+
+app.run(debug=True)
 

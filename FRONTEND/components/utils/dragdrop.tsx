@@ -30,7 +30,7 @@ function DragDrop(isAvatar: any = false, setimg: any) {
         const formData = new FormData();
         formData.append('image', file);
         console.log("invio a imgur", formData)
-        let response = await fetch('https://api.imgur.com/3/upload', {
+        let response = await fetch('http://127.0.0.1:5000/savefile', {
             method: 'POST',
             headers: {
                 Authorization: `Client-ID ${cid}`,
@@ -43,10 +43,10 @@ function DragDrop(isAvatar: any = false, setimg: any) {
         console.log(await response.json())
         let data = await response.json();
         if (data.success === false) {
-            response = await fetch('https://api.imgur.com/3/image', {
+            response = await fetch('http://127.0.0.1:5000/savefile', {
                 method: 'POST',
                 headers: {
-                    Authorization: `Client-ID ${cid}`,
+                    Authorization: `Client-ID`,
                     Accept: 'application/json'
                 },
                 body: formData
