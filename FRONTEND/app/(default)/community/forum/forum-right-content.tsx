@@ -41,18 +41,7 @@ export default function ForumRightContent() {
 
           {/* Blocks */}
           <div className="space-y-4">
-
             
-            {/* Block 2 */}
-            <div className="bg-slate-50 dark:bg-slate-800/20 p-4 rounded border border-slate-200 dark:border-slate-700">
-              <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-4">Popular Stories</div>
-              <ul className="space-y-3">
-              {story("I built and sold 2 small SaaS products and quit my job in the last two years — AMA","UserName",2,312)}             
-              </ul>
-              <div className="mt-4">
-                <button className="btn-sm w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
