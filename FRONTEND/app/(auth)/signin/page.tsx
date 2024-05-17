@@ -2,15 +2,17 @@
 import Link from 'next/link'
 import AuthHeader from '../auth-header'
 import AuthImage from '../auth-image'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 //const bcrypt = require('bcrypt');
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-
+import { useWalletClient, useAccount } from 'wagmi'
 export default function SignIn() {
-
+  const { data: walletClient } = useWalletClient()
+  const useacc = useAccount()
+  const addyUsr = useacc.address
   const [formData, setFormData] = useState({ email: '', password: '', address: '' });
   const address = '0x391FB980526B32fE88796273cEA486468dA0ABCD';///placeholder
   const notyf = new Notyf()
@@ -49,7 +51,11 @@ export default function SignIn() {
 
 
 
-
+useEffect(() => {
+  if(addyUsr){
+    window.location.href = '/community/forum';
+  }
+}, [addyUsr]);
 
 
 
