@@ -25,6 +25,9 @@ export default function ProfileBody() {
   const [showDragDrop, setShowDragDrop] = useState(false);
   const [linkzImg, setLinkzImg] = useState("");
   const [avatar, setAvatar] = useState(UserAvatar);
+  const [loadNft, setLoadNft] = useState(false)
+  const [nftaddy, setNftAddy] = useState("")
+  const [nftId, setNftId] = useState("")
   const { sidebarOpen, setSidebarOpen, authenticated, username } = useContext(AppContext);
 useEffect(() => {
     //TODO prendi avatar da db
@@ -41,7 +44,48 @@ useEffect(() => {
         { name: 'uri', type: 'string' },
       ],
     },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
   ];
+
+useEffect(() => {
+  getNft()
+},[nftaddy,nftId])
+
+  async function getNft() {
+    if (!addyUsr || !walletClient) { openConnectModal && openConnectModal(); return }
+    if(!nftaddy || !nftId) return
+    try {
+      const res = await publicClient.readContract({
+        address: `0x${nftaddy.split("x")[1]}`,
+        abi: contractABI,
+        functionName: 'tokenURI',
+        args: [nftId],
+      });
+      console.log(res)
+      setLinkzImg(res as string)
+      
+    } catch (error) {
+      console.error('Error minting avatar:', error);
+    }
+  }
 
   async function mintAvatar(uri: string) {
     if (!addyUsr || !walletClient) { openConnectModal && openConnectModal(); return }
@@ -104,16 +148,29 @@ useEffect(() => {
         />
         
         {showDragDrop && (
-          <div className=' ml-3 flex justify-center items-center'>
+          <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}} className='absolute ml-[10%] w-[35vw] h-[25vh] ml-3 flex justify-center items-center flex-col gap-1 border border-slate-200 dark:border-slate-700 w-[30%] h-[30%]'>
             <DragDrop setimg={setLinkzImg} avatar={true} />
             {isAddy ? 
-          
-              <button onClick={()=>mintAvatar(linkzImg)} className="h-[30%] w-[25%] text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm">  
-              <p className='gap-1'>Mint avatar</p>
-            </button>
+              <button onClick={()=>mintAvatar(linkzImg)} className="mt-1 h-[25%] w-[25%] text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm">  
+                <p className='gap-1'>Mint avatar</p>
+              </button>
             :null
           }
+
+
+          <div className='flex flex-row justify-center items-center'>
+            <input className='bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' type='checkbox' onClick={()=>setLoadNft(!loadNft)} />
+            <label>Load NFT</label>
           </div>
+          {loadNft ? 
+            <div className=' flex flex-row justify-center items-center w-[95%]'>
+              <input className='w-[80%] h-[90%] border rounded-l-md bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' onClick={()=>setNftAddy(nftaddy)} type='text' placeholder='NFT address' />
+              <input className='w-[20%] h-[90%] border rounded-r-md bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' onClick={()=>setNftId(nftId)} type='text' placeholder='NFT id'  />
+            </div>
+          :null}
+          </div>
+          
+          
         )}
       </div>
 
