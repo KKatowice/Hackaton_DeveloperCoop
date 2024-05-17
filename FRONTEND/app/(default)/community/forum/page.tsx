@@ -24,7 +24,7 @@ export default function Forum() {
               {/* Buttons group */}
               <div className="mb-4">
                 <div className="w-full flex flex-wrap -space-x-px">
-                  <button className="btn grow bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/20 text-slate-600 dark:text-slate-300 rounded-none first:rounded-l last:rounded-r">Newest</button>
+                  <button className="btn grow bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/20 text-slate-600 dark:text-slate-300 rounded-none first:rounded-l last:rounded-r">Più recenti</button>
                 </div>
               </div>
 
@@ -38,10 +38,10 @@ export default function Forum() {
                 <nav className="inline-flex" role="navigation" aria-label="Navigation">
                   <ul className="flex justify-center">
                     <li className="ml-3 first:ml-0">
-                      <span className="btn bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600">&lt;- Previous</span>
+                      <span className="btn bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600">&lt;- Precedente</span>
                     </li>
                     <li className="ml-3 first:ml-0">
-                      <a className="btn bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500" href="#0">Next -&gt;</a>
+                      <a className="btn bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500" href="#0">Successivo -&gt;</a>
                     </li>
                   </ul>
                 </nav>
