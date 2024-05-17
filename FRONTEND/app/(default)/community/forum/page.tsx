@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 
 export default function Forum() {
 
-  const [entries, setEntries] = useState([{title:"testitle", user:"testuser", date:"420", likes:"69"}])// title, user, date, likes
+  const [entries, setEntries] = useState([{title:"testitle", user:"testuser", date:"20", likes:"629"},{title:"testitle", user:"testuser", date:"420", likes:"69"},{title:"testitle", user:"testuser", date:"42", likes:"6"},{title:"testitle", user:"testuser", date:"20", likes:"9"}])// title, user, date, likes
 
   useEffect(() => {
     async function fetchData(){
