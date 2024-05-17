@@ -70,8 +70,9 @@ useEffect(() => {
 },[nftaddy,nftId])
 
   async function getNft() {
-    if (!addyUsr || !walletClient) { openConnectModal && openConnectModal(); return }
+    
     if(!nftaddy || !nftId) return
+    if (!addyUsr || !walletClient) { openConnectModal && openConnectModal(); return }
     try {
       const res = await publicClient.readContract({
         address: `0x${nftaddy.split("x")[1]}`,
@@ -148,27 +149,33 @@ useEffect(() => {
         />
         
         {showDragDrop && (
-          <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}} className='absolute ml-[10%] w-[35vw] h-[25vh] ml-3 flex justify-center items-center flex-col gap-1 border border-slate-200 dark:border-slate-700 w-[30%] h-[30%]'>
+          <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}} className='absolute ml-[15%] w-[45vw] h-[35vh] ml-3 flex justify-center items-center flex-col gap-1 border border-slate-200 dark:border-slate-700 w-[30%] h-[30%]'>
             <DragDrop setimg={setLinkzImg} avatar={true} />
             {isAddy ? 
-              <button onClick={()=>mintAvatar(linkzImg)} className="mt-1 h-[25%] w-[25%] text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm">  
+              <button onClick={()=>mintAvatar(linkzImg)} className="mt-1 h-[15%] w-[25%] text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm">  
                 <p className='gap-1'>Mint avatar</p>
               </button>
             :null
           }
 
 
-          <div className='flex flex-row justify-center items-center'>
-            <input className='bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' type='checkbox' onClick={()=>setLoadNft(!loadNft)} />
+          <div className='flex flex-row justify-center items-center mt-2'>
+            <input className='ml-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' type='checkbox' onClick={()=>setLoadNft(!loadNft)} />
             <label>Load NFT</label>
           </div>
-          {loadNft ? 
+          {loadNft ?     
+          <div className='flex flex-col justify-center items-center'>
+
             <div className=' flex flex-row justify-center items-center w-[95%]'>
               <input className='w-[80%] h-[90%] border rounded-l-md bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' onClick={()=>setNftAddy(nftaddy)} type='text' placeholder='NFT address' />
               <input className='w-[20%] h-[90%] border rounded-r-md bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-70 focus:bg-white dark:focus:bg-slate-800 placeholder-slate-500' onClick={()=>setNftId(nftId)} type='text' placeholder='NFT id'  />
             </div>
+              <button className='mt-1 text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm'>Set Avatar</button>
+          </div>
           :null}
           </div>
+          
+          
           
           
         )}
