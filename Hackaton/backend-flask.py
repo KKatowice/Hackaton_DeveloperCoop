@@ -3,14 +3,17 @@ from flask import Flask, jsonify, request
 from werkzeug.utils import secure_filename
 from datetime import timedelta
 import json
+from openai import OpenAI
+from google.cloud import storage
 
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = "../Hackaton/files"
 client = pymongo.MongoClient("mongodb+srv://armandolacerezagc:yyfRehzIWI8M8Nok@cluster0.kwa0fg9.mongodb.net/")
 db = client["Hackaton_db"]
 forum_post = db["forum_post"]
 users = db["users"]
-
+keydb = db["key"]
 
 @app.route("/insertuser", methods=["POST"])
 def insertuser():
@@ -27,10 +30,10 @@ def insertuser():
 def newpost():
     new_post = json.loads(request.json)
     forum_post.insert_one(new_post)
-    users.update_one(
-        {'email': new_post["email"],
-         {'$push': {}}}
-    )
+    # users.update_one(
+    #     {'email': new_post["email"],
+    #      {'$push': {}}}
+    # )
     return jsonify({"result": "ok"})
 
 @app.route("/newcomment", methods=["POST"])
@@ -79,14 +82,34 @@ def savefile():
 
 @app.route("/pswd", methods=["POST"])
 def get_salt_pswd():
-    email = json.loads(request.json)
+    email = json.loads(request.json)["email"]
     response = users.find({"email": email}, {"_id":0, "salt":1, "password":1})
     for elem in response:
         diz = {"salt": elem["salt"], "password": elem["password"]}
         return jsonify(diz)
+
+@app.route("/ia", methods=["POST"])
+def ia():
+    info = json.loads(request.json)
+    prompt = info["prompt"]
+    response = ia_service(prompt)
+    return jsonify({"response": response})
 
 
 def correct_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def ia_service(prompt):
+    risultato = list(keydb.find())
+    key = risultato[0]["key"]
+    client = OpenAI(api_key=key)
+
+    chat_completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        max_tokens=1024,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return str(chat_completion.choices[0].message.content)
+
