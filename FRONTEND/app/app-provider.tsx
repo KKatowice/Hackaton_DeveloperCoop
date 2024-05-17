@@ -32,12 +32,14 @@ interface ContextProps {
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
   authenticated: boolean;
+  username:string;
 }
 
 export const AppContext = createContext<ContextProps>({
   sidebarOpen: false,
   setSidebarOpen: (): boolean => false,
-  authenticated: false
+  authenticated: false,
+  username:""
 })
 
 export default function AppProvider({
@@ -111,7 +113,7 @@ export default function AppProvider({
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [jwtToken, setJwtToken] = useState<string | null>(null)
+  const [username, setUsername] = useState<string | null>(null)
   useEffect(() => {
     const jwtCookie = hasCookie('jwt');
     const cookieValue = Cookies.get();
@@ -120,6 +122,7 @@ export default function AppProvider({
       try {
         //const userData = verifyJwt(jwtCookie);
         setAuthenticated(jwtCookie);
+        setUsername(cookieValue.user)
         //setJwtToken(jwtCookie);
       } catch (error) {
         // Handle invalid JWT or errors
@@ -136,7 +139,7 @@ export default function AppProvider({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={customTheme}>
-          <AppContext.Provider value={{ sidebarOpen, setSidebarOpen, authenticated }}>
+          <AppContext.Provider value={{ sidebarOpen, setSidebarOpen, authenticated, username }}>
             {children}
           </AppContext.Provider>
         </RainbowKitProvider>

@@ -44,12 +44,19 @@ const authPost = async (req: NextApiRequest, res: NextApiResponse) => {
 
               console.log(jwt)
               //res.redirect(200, '/community/feed');
+              console.log("setto cookie user?prima ",email,address)
               Cookies.set('jwt', jwt)
+              console.log("setto cookie user?",email,address)
+              Cookies.set("user", email || address || "")
               return NextResponse.json({ jwt }, { 
                     status: 200,
                     headers: {
-                      'Set-Cookie': `jwt=${jwt}; Path=/; `
-                    } })
+                      'Set-Cookie': [
+                        `jwt=${jwt};Path=/;`,
+                        `user=${email || address || ""};Path=/;`
+                      ].join(', ')
+                    } 
+                  })
 
       }else{
         console.log("password incorrect")

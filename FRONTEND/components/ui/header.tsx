@@ -9,7 +9,7 @@ import DropdownProfile from '@/components/dropdown-profile'
 
 export default function Header() {
 
-  const { sidebarOpen, setSidebarOpen, authenticated } = useContext(AppContext);
+  const { sidebarOpen, setSidebarOpen, authenticated, username } = useContext(AppContext);
   
   console.log("yepyp",authenticated)
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false)
@@ -59,7 +59,7 @@ export default function Header() {
             <ThemeToggle />
             {/*  Divider */}
             <hr className="w-px h-6 bg-slate-200 dark:bg-slate-700 border-none" />
-            <DropdownProfile align="right" username={authenticated?"fromAPI":undefined} avatar={authenticated?"fromAPI":undefined} />
+            <DropdownProfile align="right" username={authenticated?username:undefined} avatar={authenticated?"fromAPI":undefined} />
 
           </div>
 

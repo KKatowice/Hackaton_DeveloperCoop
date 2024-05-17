@@ -5,7 +5,7 @@ import Image from 'next/image'
 import ProfileBg from '@/public/profile-bg.jpg'
 import UserAvatar from '@/public/user-128-01.jpg'
 import DragDrop from "@/components/utils/dragdrop"
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {publicClient} from "@/configzWeb3"
 import { useWalletClient, useAccount } from 'wagmi'
 import {
@@ -14,6 +14,8 @@ import {
 //TODO PRENDI SE ADDRESS E' LOGGATO
 const isAddy = true //test 
 
+import  {AppContext}  from '@/app/app-provider'
+
 export default function ProfileBody() {
     const { openConnectModal } = useConnectModal();
     const { data: walletClient } = useWalletClient()
@@ -21,9 +23,10 @@ export default function ProfileBody() {
     const addyUsr = useacc.address
   const { flyoutOpen, setFlyoutOpen } = useFlyoutContext();
   const [showDragDrop, setShowDragDrop] = useState(false);
-  const [linkzImg, setLinkzImg] = useState();
+  const [linkzImg, setLinkzImg] = useState("");
   const [avatar, setAvatar] = useState(UserAvatar);
-  useEffect(() => {
+  const { sidebarOpen, setSidebarOpen, authenticated, username } = useContext(AppContext);
+useEffect(() => {
     //TODO prendi avatar da db
   })
 
@@ -105,7 +108,7 @@ export default function ProfileBody() {
             <DragDrop setimg={setLinkzImg} avatar={true} />
             {isAddy ? 
           
-              <button onClick={} className="h-[30%] w-[25%] text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm">  
+              <button onClick={()=>mintAvatar(linkzImg)} className="h-[30%] w-[25%] text-center ml-2 text-sm shrink-0 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm">  
               <p className='gap-1'>Mint avatar</p>
             </button>
             :null
@@ -142,7 +145,7 @@ export default function ProfileBody() {
         <header className="text-center sm:text-left mb-6">
           {/* Name */}
           <div className="inline-flex items-start mb-2">
-            <h1 className="text-2xl text-slate-800 dark:text-slate-100 font-bold">Carolyn McNeail</h1>
+            <h1 className="text-2xl text-slate-800 dark:text-slate-100 font-bold">{authenticated?username:""}</h1>
             <svg className="w-4 h-4 fill-current shrink-0 text-amber-500 ml-2" viewBox="0 0 16 16">
               <path d="M13 6a.75.75 0 0 1-.75-.75 1.5 1.5 0 0 0-1.5-1.5.75.75 0 1 1 0-1.5 1.5 1.5 0 0 0 1.5-1.5.75.75 0 1 1 1.5 0 1.5 1.5 0 0 0 1.5 1.5.75.75 0 1 1 0 1.5 1.5 1.5 0 0 0-1.5 1.5A.75.75 0 0 1 13 6ZM6 16a1 1 0 0 1-1-1 4 4 0 0 0-4-4 1 1 0 0 1 0-2 4 4 0 0 0 4-4 1 1 0 1 1 2 0 4 4 0 0 0 4 4 1 1 0 0 1 0 2 4 4 0 0 0-4 4 1 1 0 0 1-1 1Z" />
             </svg>
