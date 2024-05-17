@@ -1,19 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { useAppProvider } from '@/app/app-provider'
+import { useContext, useState } from 'react'
+import  {AppContext}  from '@/app/app-provider'
 
-import SearchModal from '@/components/search-modal'
 import Notifications from '@/components/dropdown-notifications'
-import DropdownHelp from '@/components/dropdown-help'
 import ThemeToggle from '@/components/theme-toggle'
 import DropdownProfile from '@/components/dropdown-profile'
 
 export default function Header() {
 
-  const { sidebarOpen, setSidebarOpen } = useAppProvider()
+  const { sidebarOpen, setSidebarOpen, authenticated, username } = useContext(AppContext);
+  
+  console.log("yepyp",authenticated)
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false)
-
+  //TODO fetch db for user infos
   return (
     <header className="sticky top-0 bg-white dark:bg-[#182235] border-b border-slate-200 dark:border-slate-700 z-30">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -54,12 +54,12 @@ export default function Header() {
               </button>
 {/*               <SearchModal isOpen={searchModalOpen} setIsOpen={setSearchModalOpen} />
  */}            </div>
-            <Notifications align="right" />
+            {/* <Notifications align="right" /> */}
             {/* <DropdownHelp align="right" /> */}
             <ThemeToggle />
             {/*  Divider */}
             <hr className="w-px h-6 bg-slate-200 dark:bg-slate-700 border-none" />
-            <DropdownProfile align="right" />
+            <DropdownProfile align="right" username={authenticated?username:undefined} avatar={authenticated?"fromAPI":undefined} />
 
           </div>
 
