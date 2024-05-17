@@ -113,7 +113,7 @@ export default function AppProvider({
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [username, setUsername] = useState<string | null>(null)
+  const [username, setUsername] = useState<string>("")
   useEffect(() => {
     const jwtCookie = hasCookie('jwt');
     const cookieValue = Cookies.get();
