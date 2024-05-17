@@ -1,14 +1,27 @@
-export const metadata = {
-  title: 'Forum - Mosaic',
-  description: 'Page description',
-}
+"use client"
+// export const metadata = {
+//   title: 'Forum - Mosaic',
+//   description: 'Page description',
+// }
 
 import Image from 'next/image'
 import ForumLeftContent from './forum-left-content'
 import ForumEntries from './forum-entries'
 import ForumRightContent from './forum-right-content'
+import { useEffect, useState } from 'react'
 
 export default function Forum() {
+
+  const [entries, setEntries] = useState([{title:"testitle", user:"testuser", date:"420", likes:"69"}])// title, user, date, likes
+
+  useEffect(() => {
+    async function fetchData(){
+      const response = await fetch('http://127.0.0.1:5000/')
+      const data = await response.json()
+      setEntries(data[0])
+    }
+  }, [])
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
@@ -32,7 +45,11 @@ export default function Forum() {
 
               {/* Forum Entries */}
               <div className="space-y-2">
-                <ForumEntries />
+                {
+                  entries.map((entry: any) => (
+                    <ForumEntries entries={entry} />
+                  ))
+                }
               </div>
 
               {/* Pagination */}
