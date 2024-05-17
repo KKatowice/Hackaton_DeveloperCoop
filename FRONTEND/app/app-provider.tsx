@@ -1,12 +1,19 @@
 'use client'
+
+import Cookies from 'js-cookie';
+
+import { safeWallet,phantomWallet,safeheronWallet,trustWallet, metaMaskWallet,injectedWallet  } from '@rainbow-me/rainbowkit/wallets';
+
 import './css/globals.css'
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
-import { getCookie } from 'cookies-next';
+import { hasCookie  } from 'cookies-next';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultConfig,
   RainbowKitProvider,
+  connectorsForWallets 
 } from '@rainbow-me/rainbowkit';
+
 import { WagmiProvider } from 'wagmi';
 import {
   mainnet,
@@ -25,14 +32,12 @@ interface ContextProps {
   sidebarOpen: boolean;
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
   authenticated: boolean;
-  jwtToken: string | null;
 }
 
-const AppContext = createContext<ContextProps>({
+export const AppContext = createContext<ContextProps>({
   sidebarOpen: false,
   setSidebarOpen: (): boolean => false,
-  authenticated: false,
-  jwtToken: null
+  authenticated: false
 })
 
 export default function AppProvider({
@@ -44,8 +49,8 @@ export default function AppProvider({
   const config = getDefaultConfig({
     appName: 'testhkton',
     projectId: 'e2b4d0b3cd8b2508b3b519ff74cf580b',
-    chains: [mainnet, polygon, optimism, arbitrum, base, sepolia],
-    ssr: true, // If your dApp uses server side rendering (SSR)
+    chains: [sepolia],
+    ssr: true, // If your dApp uses server side rendering (SSR),
   });
   const queryClient = new QueryClient();
   const customTheme = {
@@ -107,14 +112,15 @@ export default function AppProvider({
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [jwtToken, setJwtToken] = useState<string | null>(null)
-
   useEffect(() => {
-    const jwtCookie = getCookie('jwt');
+    const jwtCookie = hasCookie('jwt');
+    const cookieValue = Cookies.get();
+    console.log("jwtCookie!!!!!!!!!!!!",cookieValue)
     if (jwtCookie) {
       try {
-        const userData = verifyJwt(jwtCookie); // Implement your JWT verification logic here
-        setAuthenticated(userData);
-        setJwtToken(jwtCookie);
+        //const userData = verifyJwt(jwtCookie);
+        setAuthenticated(jwtCookie);
+        //setJwtToken(jwtCookie);
       } catch (error) {
         // Handle invalid JWT or errors
         console.error(error);
@@ -130,7 +136,7 @@ export default function AppProvider({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={customTheme}>
-          <AppContext.Provider value={{ sidebarOpen, setSidebarOpen, authenticated, jwtToken }}>
+          <AppContext.Provider value={{ sidebarOpen, setSidebarOpen, authenticated }}>
             {children}
           </AppContext.Provider>
         </RainbowKitProvider>

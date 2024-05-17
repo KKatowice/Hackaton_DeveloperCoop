@@ -6,6 +6,7 @@ const ky = process.env.KEYJWT
 const uintKy = new TextEncoder().encode(ky);
 const alg = 'HS256'
 const bcrypt = require('bcrypt');
+import Cookies from 'js-cookie';
 
 const authPost = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
@@ -17,7 +18,7 @@ const authPost = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const body = await (req as any).json();
   const { email, password, address } = body.data;
-  console.log("make some salt e psw", await bcrypt.genSalt(4), "pass e mail",password, email)
+  console.log("make some salt e psw", await bcrypt.genSalt(2), "pass e mail",password, email)
   let jwt;
   if (email && password) {
     // get user psw e salt from db
@@ -43,10 +44,11 @@ const authPost = async (req: NextApiRequest, res: NextApiResponse) => {
 
               console.log(jwt)
               //res.redirect(200, '/community/feed');
+              Cookies.set('jwt', jwt)
               return NextResponse.json({ jwt }, { 
                     status: 200,
                     headers: {
-                      'Set-Cookie': `jwt=${jwt}; Path=/; HttpOnly`
+                      'Set-Cookie': `jwt=${jwt}; Path=/; `
                     } })
 
       }else{
